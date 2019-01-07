@@ -143,6 +143,7 @@ class ESP8266(LEDController):
         """
         message = pixels.T.clip(0, config.settings["configuration"]["MAX_BRIGHTNESS"]).astype(np.uint8).ravel().tostring()
         self._sock.sendto(message, (self._ip, self._port))
+        # self._sock.sendto(message, ('192.168.0.155', 7777))
 
 
 class FadeCandy(LEDController):

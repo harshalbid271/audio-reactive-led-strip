@@ -7,29 +7,34 @@
 #include "FastLED.h"
 
 /************ Network Information (CHANGE THESE FOR YOUR SETUP) ************************/
-const char* ssid = "WIFI_SSID";
-const char* password = "WIFI_PASSWORD";
+const char* ssid = "_A1306";
+const char* password = "openopen";
 
 const char* sensor_name = "TEST_SENSOR_HOSTNAME";
 const char* ota_password = "OTA_PASSWORD";
 
 const bool static_ip = true;
 IPAddress ip(192, 168, 1, 112);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
 
-const int udp_port = 7778;
+const int udp_port1 = 7777;
+const int udp_port2 = 7778;
 
 /*********************************** FastLED Defintions ********************************/
-#define NUM_LEDS      250
-#define DATA_PIN      5
+#define NUM_LEDS      180
+#define DATA_PIN1      6
+#define DATA_PIN2      5
 //#define CLOCK_PIN   2
 #define CHIPSET       WS2812B
 #define COLOR_ORDER   GRB
 
 /*********************************** Globals *******************************************/
-WiFiUDP port;
-CRGB leds[NUM_LEDS];
+WiFiUDP port1;
+WiFiUDP port2;
+
+CRGB leds1[NUM_LEDS];
+CRGB leds2[NUM_LEDS];
 
 /********************************** Start Setup ****************************************/
 void setup() {
@@ -37,19 +42,22 @@ void setup() {
 
   // Setup FastLED
   #ifdef CLOCK_PIN
-    FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+    FastLED.addLeds<CHIPSET, DATA_PIN1, CLOCK_PIN, COLOR_ORDER>(leds1, NUM_LEDS);
+    FastLED.addLeds<CHIPSET, DATA_PIN2, CLOCK_PIN, COLOR_ORDER>(leds2, NUM_LEDS);
   #else
-    FastLED.addLeds<CHIPSET, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+    FastLED.addLeds<CHIPSET, DATA_PIN1, COLOR_ORDER>(leds1, NUM_LEDS);
+    FastLED.addLeds<CHIPSET, DATA_PIN2, COLOR_ORDER>(leds2, NUM_LEDS);
   #endif
 
   // Setup the wifi connection
   setup_wifi();
 
   // Setup OTA firmware updates
-  setup_ota();
+  //setup_ota();
 
   // Initialize the UDP port
-  port.begin(udp_port);
+  port1.begin(udp_port1);
+  port2.begin(udp_port2);
 }
 
 void setup_wifi() {
@@ -103,7 +111,6 @@ void setup_ota() {
 }
 
 void loop() {
-
   if (WiFi.status() != WL_CONNECTED) {
     delay(1);
     Serial.print("WIFI Disconnected. Attempting reconnection.");
@@ -111,7 +118,7 @@ void loop() {
     return;
   }
   
-  ArduinoOTA.handle();
+  //ArduinoOTA.handle();
 
   // TODO: Hookup either a more elaborate protocol, or a secondary
   // communication channel (i.e. mqtt) for functional control. This
@@ -119,13 +126,24 @@ void loop() {
   // be driven completely locally making them less glitchy.
 
   // Handle UDP data
-  int packetSize = port.parsePacket();
-  if (packetSize == sizeof(leds)) {
-    port.read((char*)leds, sizeof(leds));
-    FastLED.show();
+  int packetSize = port1.parsePacket();
+  if (packetSize == sizeof(leds1)) {
+    port1.read((char*)leds1, sizeof(leds1));
   } else if (packetSize) {
-    Serial.printf("Invalid packet size: %u (expected %u)\n", packetSize, sizeof(leds));
-    port.flush();
+    Serial.printf("Invalid packet size: %u (expected %u)\n", packetSize, sizeof(leds1));
+    port1.flush();
     return;
   }
+
+  packetSize = port2.parsePacket();
+  if (packetSize == sizeof(leds2)) {
+    port2.read((char*)leds2, sizeof(leds2));
+  } else if (packetSize) {
+    Serial.printf("Invalid packet size: %u (expected %u)\n", packetSize, sizeof(leds2));
+    port2.flush();
+    return;
+  }
+
+  FastLED.show();
+
 }

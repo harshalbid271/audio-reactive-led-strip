@@ -16,9 +16,9 @@ settings = {                                                      # All settings
                      'DISPLAY_FPS': False,                        # Whether to print the FPS when running (can reduce performance)
                      'MIC_RATE': 48000,                           # Sampling frequency of the microphone in Hz
                      'FPS': 60,                                   # Desired refresh rate of the visualization (frames per second)
-                     'MIN_FREQUENCY': 20,                         # Frequencies below this value will be removed during audio processing
+                     'MIN_FREQUENCY': 35,                         # Frequencies below this value will be removed during audio processing
                      'MAX_FREQUENCY': 18000,                      # Frequencies above this value will be removed during audio processing
-                     'MAX_BRIGHTNESS': 250,                       # Frequencies above this value will be removed during audio processing
+                     'MAX_BRIGHTNESS': 30,                       # Frequencies above this value will be removed during audio processing
                      'N_ROLLING_HISTORY': 4,                      # Number of past audio frames to include in the rolling window
                      'MIN_VOLUME_THRESHOLD': 0.001                # No music visualization displayed if recorded audio volume below threshold
                     #'LOGARITHMIC_SCALING': True,                 # Scale frequencies logarithmically to match perceived pitch of human ear
@@ -33,17 +33,17 @@ settings = {                                                      # All settings
     # All devices and their respective settings. Indexed by name, call each one what you want.
     "devices":{"Desk Strip":{
                       "configuration":{"TYPE": "ESP8266",                           # Device type (see below for all supported boards)
-                                         # Required configuration for device. See below for all required keys per device
-                                       "AUTO_DETECT": True,                         # Set this true if you're using windows hotspot to connect (see below for more info)
-                                       "MAC_ADDR": "2c-3a-e8-2f-2c-9f",             # MAC address of the ESP8266. Only used if AUTO_DETECT is True
-                                       "UDP_IP": "192.168.1.208",                   # IP address of the ESP8266. Must match IP in ws2812_controller.ino
-                                       "UDP_PORT": 7778,                            # Port number used for socket communication between Python and ESP8266
-                                       "MAX_BRIGHTNESS": 250,                       # Max brightness of output (0-255) (my strip sometimes bugs out with high brightness)
-                                         # Other configuration 
-                                       "N_PIXELS": 58,                             # Number of pixels in the LED strip (must match ESP8266 firmware)
-                                       "N_FFT_BINS": 24,                            # Number of frequency bins to use when transforming audio to frequency domain
-                                       "current_effect": "Energy"                   # Currently selected effect for this board, used as default when program launches
-                                      },
+                                        # Required configuration for device. See below for all required keys per device
+                                      "AUTO_DETECT": False,                         # Set this true if you're using windows hotspot to connect (see below for more info)
+                                      "MAC_ADDR": "60:9a:c1:e1:e2:b1",             # MAC address of the ESP8266. Only used if AUTO_DETECT is True
+                                      "UDP_IP": "192.168.0.155",                   # IP address of the ESP8266. Must match IP in ws2812_controller.ino
+                                      "UDP_PORT": 7778,                            # Port number used for socket communication between Python and ESP8266
+                                      "MAX_BRIGHTNESS": 180,                       # Max brightness of output (0-255) (my strip sometimes bugs out with high brightness)
+                                        # Other configuration
+                                      "N_PIXELS": 180,                             # Number of pixels in the LED strip (must match ESP8266 firmware)
+                                      "N_FFT_BINS": 24,                            # Number of frequency bins to use when transforming audio to frequency domain
+                                      "current_effect": "Single"                   # Currently selected effect for this board, used as default when program launches
+                                     },
     
                       # Configurable options for this board's effects go in this dictionary.
                       # Usage: config.settings["devices"][name]["effect_opts"][effect][option]
@@ -106,17 +106,17 @@ settings = {                                                      # All settings
                "Main Strip":{
                      "configuration":{"TYPE": "ESP8266",                           # Device type (see below for all supported boards)
                                         # Required configuration for device. See below for all required keys per device
-                                      "AUTO_DETECT": True,                         # Set this true if you're using windows hotspot to connect (see below for more info)
-                                      "MAC_ADDR": "5c-cf-7f-f0-8c-f3",             # MAC address of the ESP8266. Only used if AUTO_DETECT is True
-                                      "UDP_IP": "192.168.1.208",                   # IP address of the ESP8266. Must match IP in ws2812_controller.ino
-                                      "UDP_PORT": 7778,                            # Port number used for socket communication between Python and ESP8266
+                                      "AUTO_DETECT": False,                         # Set this true if you're using windows hotspot to connect (see below for more info)
+                                      "MAC_ADDR": "60:9a:c1:e1:e2:b1",             # MAC address of the ESP8266. Only used if AUTO_DETECT is True
+                                      "UDP_IP": "192.168.0.155",                   # IP address of the ESP8266. Must match IP in ws2812_controller.ino
+                                      "UDP_PORT": 7777,                            # Port number used for socket communication between Python and ESP8266
                                       "MAX_BRIGHTNESS": 180,                       # Max brightness of output (0-255) (my strip sometimes bugs out with high brightness)
-                                        # Other configuration 
-                                      "N_PIXELS": 226,                             # Number of pixels in the LED strip (must match ESP8266 firmware)
+                                        # Other configuration
+                                      "N_PIXELS": 180,                             # Number of pixels in the LED strip (must match ESP8266 firmware)
                                       "N_FFT_BINS": 24,                            # Number of frequency bins to use when transforming audio to frequency domain
                                       "current_effect": "Single"                   # Currently selected effect for this board, used as default when program launches
                                      },
-   
+
                      # Configurable options for this board's effects go in this dictionary.
                      # Usage: config.settings["devices"][name]["effect_opts"][effect][option]
                      "effect_opts":{"Energy":    {"blur": 1,                       # Amount of blur to apply
@@ -127,7 +127,7 @@ settings = {                                                      # All settings
                                     "Wave":      {"color_wave": "Red",             # Colour of moving bit
                                                   "color_flash": "White",          # Colour of flashy bit
                                                   "wipe_len":5,                    # Initial length of colour bit after beat
-                                                  "decay": 0.7,                    # How quickly the flash fades away 
+                                                  "decay": 0.7,                    # How quickly the flash fades away
                                                   "wipe_speed":2},                 # Number of pixels added to colour bit every frame
                                     "Spectrum":  {"r_multiplier": 1.0,             # How much red
                                                   "g_multiplier": 1.0,             # How much green
@@ -160,7 +160,7 @@ settings = {                                                      # All settings
                                                   "color_mode":"Spectral",         # Multicolour mode to use
                                                   "roll_speed":0,                  # How fast (if at all) to cycle colour colours across strip
                                                   "mirror": False,                 # Mirror down centre of strip
-                                                  #"reverse_grad": False,           # Flip (LR) gradient 
+                                                  #"reverse_grad": False,           # Flip (LR) gradient
                                                   "reverse_roll": False,           # Reverse movement of gradient roll
                                                   "flip_lr":False},                # Flip output left-right
                                     "Gradient":  {"color_mode":"Spectral",         # Colour gradient to display

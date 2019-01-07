@@ -97,7 +97,7 @@ def _update_esp8266():
         m.append(pixels[2][i])  # Pixel blue value
     m = bytes(m)
     _sock.sendto(m, (config.settings["configuration"]["UDP_IP"], config.settings["configuration"]["UDP_PORT"]))
-    
+    print('written apparently'+str(len(m)))
     # for packet_indices in idx:
     #     m = '' if _is_python_2 else []
     #     for i in packet_indices:
