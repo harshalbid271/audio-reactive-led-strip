@@ -57,7 +57,7 @@ class Visualizer():
                                   "low":0,
                                   "mid":0,
                                   "high":0}
-        self.detection_ranges = {"beat":(0,int(config.settings["devices"][self.board]["configuration"]["N_FFT_BINS"]*0.13)),
+        self.detection_ranges = {"beat":(0,int(config.settings["devices"][self.board]["configuration"]["N_FFT_BINS"]*0.3)),
                                  "low":(int(config.settings["devices"][self.board]["configuration"]["N_FFT_BINS"]*0.15),
                                         int(config.settings["devices"][self.board]["configuration"]["N_FFT_BINS"]*0.4)),
                                  "mid":(int(config.settings["devices"][self.board]["configuration"]["N_FFT_BINS"]*0.4),

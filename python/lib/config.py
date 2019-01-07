@@ -1,7 +1,6 @@
 """Default settings and configuration for audio reactive LED strip"""
-from __future__ import print_function
 from __future__ import division
-import os
+from __future__ import print_function
 
 use_defaults = {"configuration": True,                           # See notes below for detailed explanation
                 "GUI_opts": False,
@@ -16,12 +15,12 @@ settings = {                                                      # All settings
                      'DISPLAY_FPS': False,                        # Whether to print the FPS when running (can reduce performance)
                      'MIC_RATE': 48000,                           # Sampling frequency of the microphone in Hz
                      'FPS': 60,                                   # Desired refresh rate of the visualization (frames per second)
-                     'MIN_FREQUENCY': 35,                         # Frequencies below this value will be removed during audio processing
+                     'MIN_FREQUENCY': 20,                         # Frequencies below this value will be removed during audio processing
                      'MAX_FREQUENCY': 18000,                      # Frequencies above this value will be removed during audio processing
-                     'MAX_BRIGHTNESS': 30,                       # Frequencies above this value will be removed during audio processing
+                     'MAX_BRIGHTNESS': 200,                       # Frequencies above this value will be removed during audio processing
                      'N_ROLLING_HISTORY': 4,                      # Number of past audio frames to include in the rolling window
-                     'MIN_VOLUME_THRESHOLD': 0.001                # No music visualization displayed if recorded audio volume below threshold
-                    #'LOGARITHMIC_SCALING': True,                 # Scale frequencies logarithmically to match perceived pitch of human ear
+                     'MIN_VOLUME_THRESHOLD': 0.001,                # No music visualization displayed if recorded audio volume below threshold
+                     'LOGARITHMIC_SCALING': True,                 # Scale frequencies logarithmically to match perceived pitch of human ear
                      },
 
     "GUI_opts":{"Graphs":True,                                    # Which parts of the gui to show
@@ -31,7 +30,7 @@ settings = {                                                      # All settings
                 "Effect Options":True},
 
     # All devices and their respective settings. Indexed by name, call each one what you want.
-    "devices":{"Desk Strip":{
+    "devices":{"Left Strip":{
                       "configuration":{"TYPE": "ESP8266",                           # Device type (see below for all supported boards)
                                         # Required configuration for device. See below for all required keys per device
                                       "AUTO_DETECT": False,                         # Set this true if you're using windows hotspot to connect (see below for more info)
@@ -42,7 +41,7 @@ settings = {                                                      # All settings
                                         # Other configuration
                                       "N_PIXELS": 180,                             # Number of pixels in the LED strip (must match ESP8266 firmware)
                                       "N_FFT_BINS": 24,                            # Number of frequency bins to use when transforming audio to frequency domain
-                                      "current_effect": "Single"                   # Currently selected effect for this board, used as default when program launches
+                                      "current_effect": "Beat"                   # Currently selected effect for this board, used as default when program launches
                                      },
     
                       # Configurable options for this board's effects go in this dictionary.
@@ -82,8 +81,8 @@ settings = {                                                      # All settings
                                                    "mirror": True,                  # Mirror output down central axis
                                                    "flip_lr":False},                # Flip output left-right
                                      "Single":    {"color": "Purple"},              # Static color to show
-                                     "Beat":      {"color": "Red",                  # Colour of beat flash
-                                                   "decay": 0.7},                   # How quickly the flash fades away
+                                     "Beat":      {"color": "Pink",                  # Colour of beat flash
+                                                   "decay": 0.8},                   # How quickly the flash fades away
                                      "Bars":      {"resolution":4,                  # Number of "bars"
                                                    "color_mode":"Spectral",         # Multicolour mode to use
                                                    "roll_speed":0,                  # How fast (if at all) to cycle colour colours across strip
@@ -114,7 +113,7 @@ settings = {                                                      # All settings
                                         # Other configuration
                                       "N_PIXELS": 180,                             # Number of pixels in the LED strip (must match ESP8266 firmware)
                                       "N_FFT_BINS": 24,                            # Number of frequency bins to use when transforming audio to frequency domain
-                                      "current_effect": "Single"                   # Currently selected effect for this board, used as default when program launches
+                                      "current_effect": "Beat"                   # Currently selected effect for this board, used as default when program launches
                                      },
 
                      # Configurable options for this board's effects go in this dictionary.
@@ -154,8 +153,8 @@ settings = {                                                      # All settings
                                                   "mirror": True,                  # Mirror output down central axis
                                                   "flip_lr":False},                # Flip output left-right
                                     "Single":    {"color": "Purple"},              # Static color to show
-                                    "Beat":      {"color": "Red",                  # Colour of beat flash
-                                                  "decay": 0.7},                   # How quickly the flash fades away
+                                    "Beat":     {"color": "Pink",                  # Colour of beat flash
+                                                 "decay": 0.9},                    # How quickly the flash fades away
                                     "Bars":      {"resolution":4,                  # Number of "bars"
                                                   "color_mode":"Spectral",         # Multicolour mode to use
                                                   "roll_speed":0,                  # How fast (if at all) to cycle colour colours across strip
